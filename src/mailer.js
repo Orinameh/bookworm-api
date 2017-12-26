@@ -16,7 +16,7 @@ function setUp() {
   })
 }
 
-export default function sendConfirmationEmail(user) {
+export function sendConfirmationEmail(user) {
   const transport = setUp();
   const email = {
     from,
@@ -25,13 +25,25 @@ export default function sendConfirmationEmail(user) {
     text: `
       Welcome to Bookworm.Please, confirm your email.
 
-      ${user.generateConfirmationUrl}
+      ${user.generateConfirmationUrl()}
     `
   }
 
-  transport.sendMail(email, (err, res) => {
-    if (err) {
-      console.log(err);
-    }
-  });
+  transport.sendMail(email);
+}
+
+export function sendResetPasswordEmail(user) {
+  const transport = setUp();
+  const email = {
+    from,
+    to: user.email,
+    subject: 'Reset Password',
+    text: `
+      To reset password follow this link.
+
+      ${user.generateResetPasswordLink()}
+    `
+  }
+
+  transport.sendMail(email);
 }
